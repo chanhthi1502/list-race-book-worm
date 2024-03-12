@@ -9,6 +9,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 
 // API Routes
+const apiRoutes = require('./routes/api');
+app.use('/api', apiRoutes);
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
