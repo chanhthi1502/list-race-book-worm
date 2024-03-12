@@ -7,6 +7,7 @@ const PORT = process.env.PORT || 3000;
 // Database connection
 
 // Middleware
+app.use(bodyParser.json());
 
 // API Routes
 const apiRoutes = require('./routes/api');
