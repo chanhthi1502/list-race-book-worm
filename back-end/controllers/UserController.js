@@ -1,8 +1,8 @@
-const User = require('../models/User');
+// const User = require('../models/User');
 
 module.exports = {
 	async login(req, res) {
-		const { email, password } = req.body;
+		// const { email, password } = req.body;
 
 		// Check if user exists
 
