@@ -1,10 +1,21 @@
 // const User = require('../models/User');
+const knexConfig = require('../db/knexfile');
+const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
 
 module.exports = {
 	async login(req, res) {
-		// const { email, password } = req.body;
+		const { email, password } = req.body;
 
 		// Check if user exists
+		knex('users')
+			.select('email', 'password')
+			.where({ email, password })
+			.then(() => {
+				console.log('User exits');
+			})
+			.catch(err => {
+				console.error(err);
+			})
 
 		// Verify password
 
