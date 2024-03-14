@@ -1,7 +1,6 @@
 const express = require('express');
 const _ = require('lodash');
 const router = express.Router();
-const UserController = require('../controllers/UserController');
 
 // Test Router
 router.get('/', (req, res) => {
@@ -18,8 +17,5 @@ router.post('/', (req, res) => {
 	// Return the request body in the response
 	res.json({ message: 'POST request received successfully', requestBody });
 })
-
-// Login route
-router.post('/login', UserController.login);
 
 module.exports = router;

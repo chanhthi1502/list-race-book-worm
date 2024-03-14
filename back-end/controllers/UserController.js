@@ -1,15 +1,25 @@
 const User = require('../models/User');
 
-exports.login = async (req, res) => {
-	const { email, password } = req.body;
+module.exports = {
+	async login(req, res) {
+		const { email, password } = req.body;
 
-	// Check if user exists
+		// Check if user exists
 
-	// Verify password
+		// Verify password
 
-	// Generate JWT
+		// Generate JWT
 
-	// Handle error
+		// Handle error
 
-	res.status(405).json({ message: 'Login is not supported via GET requests' });
-};
+		res.status(405).json({ message: 'Login is not supported via POST requests' });
+	},
+
+	async register(req, res) {
+		res.status(405).json({ message: 'Login is not supported via POST requests' });
+	},
+
+	async logout(req, res) {
+		res.status(405).json({ message: 'Login is not supported via POST requests' });
+	},
+}
