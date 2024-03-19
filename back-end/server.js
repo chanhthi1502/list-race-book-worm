@@ -10,11 +10,6 @@ const PORT = process.env.PORT || 3000;
 // Middleware for parsing JSON
 app.use(bodyParser.json());
 
-// TODO: Database connection
-async function connectToDatabase() {
-
-}
-
 // Asynchronous function to load API Routes
 // This will ensure that route files are loaded concurrently,
 // optimizing the startup time of the server
@@ -37,7 +32,6 @@ async function loadRoutes() {
 
 // Start server
 async function startServer() {
-	await connectToDatabase();
 	await loadRoutes();
 	app.listen(PORT, () => {
 		console.log(`Server is running on port ${PORT}`);

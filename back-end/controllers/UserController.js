@@ -1,29 +1,24 @@
-// const User = require('../models/User');
-const knexConfig = require('../db/knexfile');
-const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
+const User = require('../models/User');
 
 module.exports = {
 	async login(req, res) {
-		const { email, password } = req.body;
+		try {
+			// Check if user exists
+			const userFound = await User.findAccount(req.body);
 
-		// Check if user exists
-		knex('users')
-			.select('email', 'password')
-			.where({ email, password })
-			.then(() => {
-				console.log('User exits');
-			})
-			.catch(err => {
-				console.error(err);
-			})
+			// TODO: Generate JWT
+			if (userFound) {
+				res.status(200).json({ message: 'User login successfully' })
+			} else {
+				// TODO: Should handle it instead of returning error status
+				res.status(404).json({ message: 'User not found' });
+			}
 
-		// Verify password
-
-		// Generate JWT
-
-		// Handle error
-
-		res.status(405).json({ message: 'Login is not supported via POST requests' });
+		} catch (error) {
+			// Handle any errors that occur during the login process
+			console.error('Error occurred during login:', error);
+			res.status(500).json({ message: 'Login failed' });
+		}
 	},
 
 	async register(req, res) {
