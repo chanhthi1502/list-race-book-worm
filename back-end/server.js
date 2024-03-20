@@ -4,8 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
+const globalUtil = require('./options.global');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || globalUtil.port;
 
 // Middleware for parsing JSON
 app.use(bodyParser.json());

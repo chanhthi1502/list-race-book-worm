@@ -1,4 +1,6 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const globalUtil = require('../options.global');
 
 module.exports = {
 	async login(req, res) {
@@ -6,10 +8,16 @@ module.exports = {
 			// Check if user exists
 			const userFound = await User.findAccount(req.body);
 
-			// TODO: Generate JWT
-
 			if (userFound) {
-				return res.status(200).json({ loginStatus: true, message: 'User login successfully' })
+				const sessionToken = jwt.sign(
+					{ email: req.body.email },
+					globalUtil.jwt_secret_key,
+					{ expiresIn: globalUtil.session_expired });
+				return res.status(200).json({
+					sessionToken,
+					loginStatus: true,
+					message: 'User login successfully',
+				});
 			}
 			return res.status(401).json({ loginStatus: false, message: 'User not found' });
 		} catch (error) {
@@ -32,7 +40,15 @@ module.exports = {
 				// TODO: Check strong password
 
 				if (registerStatus.done) {
-					return res.status(200).json({ registerStatus: true, message: 'Registered done' });
+					const sessionToken = jwt.sign(
+						{ email: req.body.email },
+						globalUtil.jwt_secret_key,
+						{ expiresIn: globalUtil.session_expired });
+					return res.status(200).json({
+						sessionToken,
+						registerStatus: true,
+						message: 'Registered done'
+					});
 				}
 				return res.status(401).json({ message: 'Registered failed' });
 			}
