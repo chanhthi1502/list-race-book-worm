@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const knexConfig = require('../db/knexfile');
 const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
+const sharedHelper = require('../sharedHelper');
 
 /**
  * When working with knex, always use Parameterized Queries style
@@ -45,6 +46,36 @@ module.exports = {
 			return false;
 		} catch (error) {
 			throw new Error('Fail to load user db:', error);
+		}
+	},
+
+	async registerUser(opt) {
+		if (_.isEmpty(opt)) {
+			throw new Error('Request account data is empty');
+		}
+		if (!opt.username) {
+			throw new Error('User is not provided');
+		}
+		if (!opt.email && !validator.isEmail(opt.email)) {
+			throw new Error('Email is not valid');
+		}
+		if (!opt.password) {
+			throw new Error('Password is not valid');
+		}
+
+		try {
+			const salt = await sharedHelper.generateSalt();
+			const hashedPassword = await sharedHelper.hashPassword(opt.password, salt);
+
+			const registeredUser = await knex('users')
+				.insert({
+					username: opt.username,
+					email: opt.email,
+					password: hashedPassword,
+				})
+			return !!registeredUser;
+		} catch (error) {
+			throw new Error('Fail to register user to db:', error);
 		}
 	}
 }
