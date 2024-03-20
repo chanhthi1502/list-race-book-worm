@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const validator = require('validator');
+const bcrypt = require('bcrypt');
 const knexConfig = require('../db/knexfile');
 const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
 
@@ -9,6 +10,10 @@ const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
  * Parameterized Queries will handle escapting and sanitizing input,
  * preventing SQL injection attacks.
  */
+
+const verifyPassword = async (password, hashedPassword) => {
+	return await bcrypt.compare(password, hashedPassword);
+}
 
 module.exports = {
 	async findAccount(opt) {
@@ -26,10 +31,16 @@ module.exports = {
 
 		try {
 			const account = await knex('users')
-				.where({ email: opt.email, password: opt.password })
+				.where({ email: opt.email })
 				.first();
 
-			return !!account;
+			if (account) {
+				const passwordMatch = await verifyPassword(opt.password, account.password);
+				return !!passwordMatch;
+			}
+
+			return false;
+			// throw new Error('Account not found');
 		} catch (error) {
 			throw new Error('Fail to load user db:', error);
 		}
