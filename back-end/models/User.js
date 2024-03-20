@@ -12,6 +12,11 @@ const knex = require('knex')(knexConfig[process.env.NODE_ENV]);
  */
 
 const verifyPassword = async (password, hashedPassword) => {
+	/**
+	* - When hashing the password, `bcrypt` library also concat the `salt`
+	* into the `hashedPassword` so when we are using the function `bycrypt.compare`,
+	* we no longer need to include `salt`. That is why we don't store salt in the db
+	*/
 	return await bcrypt.compare(password, hashedPassword);
 }
 
@@ -27,8 +32,6 @@ module.exports = {
 			throw new Error('Password is not valid');
 		}
 
-		// TODO: Password Hashing
-
 		try {
 			const account = await knex('users')
 				.where({ email: opt.email })
@@ -40,7 +43,6 @@ module.exports = {
 			}
 
 			return false;
-			// throw new Error('Account not found');
 		} catch (error) {
 			throw new Error('Fail to load user db:', error);
 		}

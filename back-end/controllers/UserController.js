@@ -7,25 +7,49 @@ module.exports = {
 			const userFound = await User.findAccount(req.body);
 
 			// TODO: Generate JWT
-			if (userFound) {
-				res.status(200).json({ message: 'User login successfully' })
-			} else {
-				// TODO: Should handle it instead of returning error status
-				res.status(404).json({ message: 'User not found' });
-			}
 
+			if (userFound) {
+				return res.status(200).json({ loginStatus: true, message: 'User login successfully' })
+			}
+			return res.status(401).json({ loginStatus: false, message: 'User not found' });
 		} catch (error) {
 			// Handle any errors that occur during the login process
 			console.error('Error occurred during login:', error);
-			res.status(500).json({ message: 'Login failed' });
+			return res.status(401).json({ message: `Failed to login the user ${error}` });
 		}
 	},
 
 	async register(req, res) {
-		res.status(405).json({ message: 'Login is not supported via POST requests' });
+		try {
+			const userFound = await User.findAccount(req.body);
+			if (!userFound) {
+				const registerStatus = await User.registerUser(req.body);
+
+				if (registerStatus.emailAlreadyExists) {
+					return res.status(409).json({ message: 'Email already exists' });
+				}
+
+				// TODO: Check strong password
+
+				if (registerStatus.done) {
+					return res.status(200).json({ registerStatus: true, message: 'Registered done' });
+				}
+				return res.status(401).json({ message: 'Registered failed' });
+			}
+		} catch (error) {
+			console.error('Failed to register:', error);
+			return res.status(405).json({ message: `Failed to register new user ${error}` });
+		}
 	},
 
-	async logout(req, res) {
-		res.status(405).json({ message: 'Login is not supported via POST requests' });
+	// TODO: NEED DISCUSSION
+	/**
+	 * If we are using JWT, this endpoint is not needed as we store JWT in the
+	 * cookies, so front-end can simply remove the token from the user's web browser
+	 * If we store the JWT token in the db or use session-based authentiation, then
+	 * this endpoint is needed to invalidate that.
+	 */
+	async logout() {
+		return true;
 	},
 }
