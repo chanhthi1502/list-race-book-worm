@@ -52,9 +52,10 @@ module.exports = {
 				}
 				return res.status(401).json({ message: 'Registered failed' });
 			}
+			return res.status(401).json({ message: 'Account already exists' });
 		} catch (error) {
 			console.error('Failed to register:', error);
-			return res.status(405).json({ message: `Failed to register new user ${error}` });
+			return res.status(405).json({ message: `Failed to register new user. ${error}` });
 		}
 	},
 
