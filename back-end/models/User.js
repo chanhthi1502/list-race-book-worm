@@ -75,7 +75,7 @@ module.exports = {
 				})
 			return !!registeredUser;
 		} catch (error) {
-			throw new Error('Fail to register user to db:', error);
+			throw new Error(error);
 		}
 	}
 }
