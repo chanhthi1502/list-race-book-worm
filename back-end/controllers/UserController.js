@@ -33,13 +33,13 @@ module.exports = {
 			if (!userFound) {
 				const registerStatus = await User.registerUser(req.body);
 
-				if (registerStatus.emailAlreadyExists) {
-					return res.status(409).json({ message: 'Email already exists' });
-				}
+				// if (registerStatus.emailAlreadyExists) {
+				// 	return res.status(409).json({ message: 'Email already exists' });
+				// }
 
 				// TODO: Check strong password
 
-				if (registerStatus.done) {
+				if (registerStatus) {
 					const sessionToken = jwt.sign(
 						{ email: req.body.email },
 						globalUtil.jwt_secret_key,
