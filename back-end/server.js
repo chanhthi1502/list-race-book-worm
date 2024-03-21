@@ -4,16 +4,13 @@ const path = require('path');
 const fs = require('fs');
 const util = require('util');
 
+const globalUtil = require('./options.global');
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || globalUtil.port;
 
 // Middleware for parsing JSON
 app.use(bodyParser.json());
-
-// TODO: Database connection
-async function connectToDatabase() {
-
-}
 
 // Asynchronous function to load API Routes
 // This will ensure that route files are loaded concurrently,
@@ -37,7 +34,6 @@ async function loadRoutes() {
 
 // Start server
 async function startServer() {
-	await connectToDatabase();
 	await loadRoutes();
 	app.listen(PORT, () => {
 		console.log(`Server is running on port ${PORT}`);
