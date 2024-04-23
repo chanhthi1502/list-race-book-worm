@@ -24,13 +24,13 @@ const verifyPassword = async (password, hashedPassword) => {
 module.exports = {
 	async findAccount(opt) {
 		if (_.isEmpty(opt)) {
-			throw new Error('Request account data is empty');
+			throw new Error('REQUEST_INVALID');
 		}
 		if (!opt.email && !validator.isEmail(opt.email)) {
-			throw new Error('Email is not valid');
+			throw new Error('EMAIL_INVALID');
 		}
 		if (!opt.password) {
-			throw new Error('Password is not valid');
+			throw new Error('PASSWORD_INVALID');
 		}
 
 		try {
@@ -51,16 +51,16 @@ module.exports = {
 
 	async registerUser(opt) {
 		if (_.isEmpty(opt)) {
-			throw new Error('Request account data is empty');
+			throw new Error('REQUEST_INVALID');
 		}
 		if (!opt.username) {
-			throw new Error('User is not provided');
+			throw new Error('USER_INVALID');
 		}
 		if (!opt.email && !validator.isEmail(opt.email)) {
-			throw new Error('Email is not valid');
+			throw new Error('EMAIL_INVALID');
 		}
 		if (!opt.password) {
-			throw new Error('Password is not valid');
+			throw new Error('PASSWORD_INVALID');
 		}
 
 		try {
