@@ -23,7 +23,7 @@ module.exports = {
 		} catch (error) {
 			// Handle any errors that occur during the login process
 			console.error('Error occurred during login:', error);
-			return res.status(401).json({ message: `Failed to login the user ${error}` });
+			return res.status(401).json({ message: error });
 		}
 	},
 
@@ -49,7 +49,7 @@ module.exports = {
 			return res.status(401).json({ message: 'USER_ALREADY_EXIST' });
 		} catch (error) {
 			console.error('Failed to register:', error);
-			return res.status(405).json({ message: `Failed to register new user. ${error}` });
+			return res.status(405).json({ message: error });
 		}
 	},
 

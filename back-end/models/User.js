@@ -45,7 +45,7 @@ module.exports = {
 
 			return false;
 		} catch (error) {
-			throw new Error('Fail to load user db:', error);
+			throw new Error('FIND_ACCOUNT_FAILURE' + error);
 		}
 	},
 
@@ -75,7 +75,7 @@ module.exports = {
 				})
 			return !!registeredUser;
 		} catch (error) {
-			throw new Error(error);
+			throw new Error('REGISTER_FAILURE' + error);
 		}
 	}
 }
