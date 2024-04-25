@@ -16,10 +16,10 @@ module.exports = {
 				return res.status(200).json({
 					sessionToken,
 					loginStatus: true,
-					message: 'User login successfully',
+					message: 'LOGIN_SUCCESSFULLY',
 				});
 			}
-			return res.status(401).json({ loginStatus: false, message: 'User not found' });
+			return res.status(401).json({ loginStatus: false, message: 'USER_NOT_FOUND' });
 		} catch (error) {
 			// Handle any errors that occur during the login process
 			console.error('Error occurred during login:', error);
@@ -33,12 +33,6 @@ module.exports = {
 			if (!userFound) {
 				const registerStatus = await User.registerUser(req.body);
 
-				// if (registerStatus.emailAlreadyExists) {
-				// 	return res.status(409).json({ message: 'Email already exists' });
-				// }
-
-				// TODO: Check strong password
-
 				if (registerStatus) {
 					const sessionToken = jwt.sign(
 						{ email: req.body.email },
@@ -47,12 +41,12 @@ module.exports = {
 					return res.status(200).json({
 						sessionToken,
 						registerStatus: true,
-						message: 'Registered done'
+						message: 'REGISTER_SUCCESSFULLY'
 					});
 				}
-				return res.status(401).json({ message: 'Registered failed' });
+				return res.status(401).json({ message: 'REGISTER_FAILURE' });
 			}
-			return res.status(401).json({ message: 'Account already exists' });
+			return res.status(401).json({ message: 'USER_ALREADY_EXIST' });
 		} catch (error) {
 			console.error('Failed to register:', error);
 			return res.status(405).json({ message: `Failed to register new user. ${error}` });
